@@ -10,5 +10,19 @@ Confirmed the same basic data was available in both datasets.
 
 Explored data see distributions of various values, and to look for trends and possible correlations.
 
-Performed feature engineering; created `precip` column based on descriptions in the readme((/metadata)) and extracted the day of the month. Filled missing hour rows.
+Performed feature engineering; 
+
+
+
+
+Run models, see which work best
+
+Feature selection
+Lasso select
+Forward/backward select
+
+Try PCA
+Polynomial features
+
+Hyperparameters
 
