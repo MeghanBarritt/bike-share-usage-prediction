@@ -1,14 +1,21 @@
 # Final Project - Bike Share Trends
 
-## Project Task
-I'm going to look at data from Washington DC covering the years 2011 and 2012, ((London Set)) to look for trends between time of day, time of year and weather conditions to try and predict bicycle rental rates.
+## Project Task<br>
+I looked at data from two cities, Washington DC and London England, over two year time spans, to try and find weather-related usage patterns in the cities' bikeshare systmes.<br>
+
+from Washington DC covering the years 2011 and 2012, and from London, England. The London data also covers two years, but covers January 4, 2015 to January 3, 2017.  to look for trends between time of day, time of year and weather conditions to try and predict bicycle rental rates. <br>
 
 ## Process
 
-### Datasets
+### Datasets<br>
+
 Found the Washington DC Capital bike share data set on [the UC Irvine website](https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset) via a list of interesting datasets, and a second dataset on [Kaggle](https://www.kaggle.com/datasets/hmavrodiev/london-bike-sharing-dataset) tracking the same variables when I checked for other data I could use. It was the only other dataset I found that had similar enough data to be usable in a short time frame. <br>
 
-Confirmed the same basic data was available in both dataset. The London data required more processing to get to the same columns at the end, but aside from the DC set having an additional breakdown between regular and guest users, the data available was the same. 
+Confirmed the same basic data was available in both dataset. The London data required more processing to get to the same columns at the end, but aside from the DC set having an additional breakdown between regular and guest users, the data available was the same. <br>
+
+The DC data starts on January 1, 2011, and ran for two years, ending on December 31, 2012. The London data missed the New Year and instead starts on January 4, and also runs for two years, but from 2015 until January 3, 2017. <br>
+
+Both datasets include hourly weather data; temperature, humidity, windspeed and 'weather condition', as well as whether or not a day is a holiday, the season, and of course the number of rentals. 
 <p>
 <br>
 </p>
@@ -41,9 +48,10 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 
 </p>
 
+
 >Linear Regression<br>
 >---
->**_DC dataset_**<br>
+>**DC dataset**<br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 129.47650158667653<br>
@@ -54,7 +62,7 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>R-squared: 0.3154146362592527<br>
 >___
 >___
->_**London dataset**_<br>
+>**London dataset**<br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 887.6725962693262<br>
@@ -64,11 +72,12 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>Root Mean Squared Error: 978.3105148178599<br>
 >>R-squared: 0.24876167392851933<br>
 >___
-
+<p>
+<br>
 
 >SVR<br>
 >---
->**_DC dataset_** <br>
+>**DC dataset** <br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 143.88640899563978<br>
@@ -79,7 +88,7 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>R-squared: 0.08828792531790608<br>
 >___
 >___
->**_London dataset_**  <br>
+>**London dataset**  <br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 1021.256075397555<br>
@@ -89,11 +98,12 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>Root Mean Squared Error: 1086.1229944892814<br>
 >>R-squared: 0.07406114159332133<br>
 >___
-
+<p>
+<br>
 
 >Random Forest Regressor<br>
 >---
->**_DC dataset_** <br>
+>**DC dataset** <br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 14.152513563206748<br>
@@ -104,7 +114,7 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>R-squared: 0.8908068409097215<br>
 >___
 >___
->_**London dataset**_ <br>
+>**London dataset** <br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 85.32546889684085<br>
@@ -114,11 +124,12 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>Root Mean Squared Error: 289.163573168845<br>
 >>R-squared: 0.9343686316506019<br>
 >___
-
+<p>
+<br>
 
 >XGBRegressor<br>
 >---
->**_DC dataset_** <br>
+>**DC dataset** <br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 24.081214852442457<br>
@@ -129,7 +140,7 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>R-squared: 0.8994784355163574<br>
 >>___
 >>___
->**_London dataset_**<br>
+>**London dataset**<br>
 >___
 >>_Train set_:<br>
 >>Root Mean Squared Error: 127.9868120875735<br>
@@ -160,7 +171,7 @@ For both datasets, using Lasso selection resulted in the removal of multiple fea
 
 _(Note: the `count` column is not involved here, as it is the dependant variable.)_
 
->_**Using Lasso**_:<br>
+>**Using Lasso**:<br>
 >___
 >_DC dataset_<br>
 >>Selected features: season, year, month, day, hour, weekday, precip, temp, humidity<br>
@@ -170,9 +181,10 @@ _(Note: the `count` column is not involved here, as it is the dependant variable
 >>Selected features: season, year, month, day, hour, weekday, workingday, weather, precip, temp, humidity, windspeed<br>
 >>Dropped features: holiday, atemp<br>
 >___
+<p>
+<br>
 
-
->_**Using Forward Select**_:<br>
+>**Using Forward Select**:<br>
 >___
 >_DC dataset_<br>
 >>Selected features: season, year, month, hour, weekday, holiday, weather, precip, temp, atemp, humidity, windspeed<br>
@@ -182,9 +194,10 @@ _(Note: the `count` column is not involved here, as it is the dependant variable
 >>Selected features: season, month, day, hour, workingday, weather, precip, temp, atemp, humidity, windspeed<br>
 >>Dropped features: year, weekday, holiday<br>
 >___
+<p>
+<br>
 
-
->_**Using Backward Select**_:<br>
+>**Using Backward Select**:<br>
 >___
 >_DC dataset_<br>
 >>Selected features: season, year, month, hour, weekday, holiday, weather, precip, atemp, humidity, windspeed<br>
@@ -221,7 +234,8 @@ To start with, I tuned both models on the regular train/test set that had all of
 >>Base model rmse: 289.163573168845 <br>
 >>Tuned model rmse: 312.8454875514148<br>
 >___
-
+<p>
+<br>
 
 >XGBoost: <br>
 >---
@@ -368,7 +382,241 @@ The DC dataset always used a max depth of 6, but the London dataset slightly pre
 
 ### Tuned Models
 
+I initiated and ran each model tuned in the hyperparameters notebook so I could fully evaluate their performances.<br>
 
+During my evaluation and comparisson, I compared the tuned models for each set to the untuned one, and the overall behavior of each dataset to the other. I looked at the `R-squared` and `Root Mean Squared Error` (R2 and RMSE) of both the training and test sets, as well as the changes between them, and the RMSE as a percentage of each dataset's maximum real value, in order to get an idea of how much error there actually was; an error of +/-50 would not be a big deal when the values in question are routinely in the thousands, but *would* be a big deal if the values were dozens at most. <br>
+<p>
+
+**DC evaluation outputs**
+
+</p>
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Train R2</th>
+      <th>Test R2</th>
+      <th>R2 Decrease</th>
+      <th>Train RMSE</th>
+      <th>Test RMSE</th>
+      <th>RMSE as % of range</th>
+      <th>RMSE Increase</th>
+      <th>RMSE Increase as % of range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>basic model</th>
+      <td>0.979</td>
+      <td>0.899</td>
+      <td>0.080</td>
+      <td>24.081</td>
+      <td>69.923</td>
+      <td>7.16</td>
+      <td>35.832</td>
+      <td>3.67</td>
+    </tr>
+    <tr>
+      <th>all features</th>
+      <td>0.973</td>
+      <td>0.903</td>
+      <td>0.070</td>
+      <td>27.238</td>
+      <td>68.692</td>
+      <td>7.03</td>
+      <td>41.454</td>
+      <td>4.24</td>
+    </tr>
+    <tr>
+      <th>fw select</th>
+      <td>0.975</td>
+      <td>0.908</td>
+      <td>0.066</td>
+      <td>26.683</td>
+      <td>66.804</td>
+      <td>6.84</td>
+      <td>40.120</td>
+      <td>4.11</td>
+    </tr>
+    <tr>
+      <th>bw select</th>
+      <td>0.967</td>
+      <td>0.898</td>
+      <td>0.069</td>
+      <td>30.417</td>
+      <td>70.396</td>
+      <td>7.21</td>
+      <td>39.979</td>
+      <td>4.09</td>
+    </tr>
+    <tr>
+      <th>lasso</th>
+      <td>0.954</td>
+      <td>0.889</td>
+      <td>0.065</td>
+      <td>35.664</td>
+      <td>73.389</td>
+      <td>7.51</td>
+      <td>37.725</td>
+      <td>3.86</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>
+<br>
+All the test R2 values are very consistent, regardless of model tuning or feature set, while the drop in R2 between the training and test sets is smaller for the tuned models, and even smaller with feature selection. <p>
+
+The test RMSEs are all also very similar, both as actual values and as percentages of the maximum possible value. While the actual values of the error increases look quite large, approximately doubleing across the board, they are actually fairly small amounts in proportion to the overall range.<p>
+
+There is not much difference in the `RMSE as %` values (0.67) *or* in the `RMSE Increase as %` values, even though there was some improvement in how much the R2 was dropping. This could mean the model is not generalizing very well on this data, even after tuning and feature selection. <p>
+
+For this data, there wasn't a consistent pattern to the performance in the raw scores, only in the amount of change from the training to test sets. 
+</p>
+<br>
+
+**London evaluation outputs**
+
+</p>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Train R2</th>
+      <th>Test R2</th>
+      <th>R2 Decrease</th>
+      <th>Train RMSE</th>
+      <th>Test RMSE</th>
+      <th>RMSE as % of range</th>
+      <th>RMSE Increase</th>
+      <th>RMSE Increase as % of range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>basic model</th>
+      <td>0.986</td>
+      <td>0.913</td>
+      <td>0.072</td>
+      <td>127.987</td>
+      <td>332.208</td>
+      <td>4.23</td>
+      <td>203.221</td>
+      <td>2.59</td>
+    </tr>
+    <tr>
+      <th>all features</th>
+      <td>0.968</td>
+      <td>0.929</td>
+      <td>0.038</td>
+      <td>193.013</td>
+      <td>299.935</td>
+      <td>3.82</td>
+      <td>106.922</td>
+      <td>1.36</td>
+    </tr>
+    <tr>
+      <th>fwbw select</th>
+      <td>0.964</td>
+      <td>0.928</td>
+      <td>0.036</td>
+      <td>203.815</td>
+      <td>302.494</td>
+      <td>3.85</td>
+      <td>98.679</td>
+      <td>1.26</td>
+    </tr>
+    <tr>
+      <th>lasso</th>
+      <td>0.969</td>
+      <td>0.936</td>
+      <td>0.033</td>
+      <td>189.722</td>
+      <td>286.016</td>
+      <td>3.64</td>
+      <td>96.293</td>
+      <td>1.23</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>
+<br>
+The R2 values for the test set are, again, very consistent. This time, however, there is a much smaller drop between the training and the test, showing that the model is better at generalizing and is not overfitting. There is no difference between the version with all features included and the train/tests produced by feature selection. <p>
+
+Here there is more variation in RMSE, with improvement in all of the tuned models, and looking at it as a percentage of the maximum possible value, it is easier to see the magnitude of the changes. The model with its features selected by `Lasso` had the largest decrease, 0.59, with the other two having around 0.4.<p>
+
+The increase in error between training and test was not similar for this model. Tuning cut the increase down dramatically for all versions. The models with feature selection had less than half the untuned model's RMSE increase. The 'all features' version was only just above the 50% mark. So, even though the actual test RMSE values were fairly close together, most of that error wasn't a result of the transition from training to test, but part of the models' attempts to account for the data. This, combined with the high R2 scores, is a good sign for the models' abilities to account for the data without overfitting. 
+</p>
+Further confirmation that the models are doing well can be seen in comparing the error on the variable being predicted, `count`, to its standard deviation in the original data. For the DC dataset it is **181.5**, while the highest test RMSE is ~73. For London those numbers are 1085.4 and ~332, respectively. In both cases, the RMSE is less than 1/3 of the standard deviation; well within "reasonable" for the data.<p>
+<br>
+</p>
+
+**Model Comparisons**<p>
+I ranked the models for each set by looking at the `Test R2` and `R2 Decrease` columns, as well as the `Test RMSE` and `RMSE Increase` columns, ignoring the training columns as they are not the target, and the other two RMSE columns as they were redundant. I put values starting at 1 for the best and so on (up to 5 for DC and 4 for London) in each column, and then added the total for each model, with the lowest value being the best overall performer. <p>
+
+|     DC     | Test R2 | R2 Decrease | Test RMSE| RMSE Increase | Total |
+|------------|---------|-------------|----------|---------------|-------| 
+|basic model |	3	   |      5      |	  3     |	   1        |	12  |
+|all features|	2      |   	  4      |	  2     |	   5        |	13  |
+|fw select   |	1      |   	  2      |	  1     |	   4        |	8   | 
+|bw select   |	4      |      3      |	  4     |	   3        |	14  |
+|lasso       |	5      |   	  1      |	  5     |	   2        |	13  |
+|            |         |             |          |               |       |
+
+Here, `Forward Select` had the best overall results, with all the others being pretty similar.<br>
+<br>
+
+|   London	 | Test R2 | R2 Decrease | Test RMSE| RMSE Increase | Total |
+|------------|---------|-------------|----------|---------------|-------|
+|basic model |	  4    |	  4      |     4    |	    4       |	16  |
+|all features|	  2    |	  3      |	   2    |	    3       |	10  |
+|fwbw select |	  3    |	  2      |	   3    |	    2       |	10  |
+|lasso	     |    1    |	  1      |	   1    |	    1       |	 4  |  
+|            |         |             |          |               |       |
+
+Here, the basic model, with no tuning, always performed the worst, while the model using `Lasso` selected features always performed the best, albiet by very small margins.  
+
+
+| Model            | Test R2 | R2 Decrease | RMSE % | RMSE Up % |
+|------------------|---------|-------------|--------|-----------|
+| DC Base          |    0.899|        0.080|    7.16|       3.67|
+| London Base      |    0.913|        0.072|	4.23|	    2.59|
+|                  |         |             |        |           |
+| DC Tuned Avg     |    0.889|        0.068|    7.15|       4.08|
+| London Tuned Avg |    0.931|        0.036|    3.77|       1.28|
+|                  |         |             |        |           |
+
+Despite having identical features to work with, the model does slightly better with the London dataset, especially after tuning. I am not sure if this is down to noise, or if there is a stronger pattern in the London set. Given that there is a more prevelant bike riding culture in Europe generally, this is the opposite of what I would have expected. 
 
 <p>
 <br>
@@ -377,5 +625,8 @@ The DC dataset always used a max depth of 6, but the London dataset slightly pre
 ### Pipelines
 
 
+
+
+ 
 
 
