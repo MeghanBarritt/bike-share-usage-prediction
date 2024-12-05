@@ -743,19 +743,59 @@ Despite having identical features to work with, the model does slightly better w
 down to noise, or if there is a stronger pattern in the London set. Given that there is a more prevelant bike riding culture in Europe generally, this is 
 the opposite of what I would have expected. 
 <p>
+</p>
+<br>
+<p>
+
+### Feature Impacts on Models
+
+In these charts, the higher-up features were more important, and the directionality of the effect and where high and low values for a feature are having an
+influence.<p>
+
+**DC Results**
+
+<img src="notebooks/charts/dc_allfeat_impacts.png" alt="DC model, all features" width="400" height="400"/>
+<div style="clear: both;"></div>
+
+<img src="notebooks/charts/dc_fw_impacts.png" alt="DC model, fw features" width="400" height="400"/>
+<div style="clear: both;"></div>
+
+<img src="notebooks/charts/dc_bw_impacts.png" alt="DC model, all features" width="400" height="400"/>
+<div style="clear: both;"></div>
+
+<img src="notebooks/charts/dc_lasso_impacts.png" alt="DC model, fw features" width="400" height="400"/>
+<div style="clear: both;"></div>
+<p>
 <br>
 </p>
 
+**London Results**
 
-
-<img src="notebooks/charts/dc_allfeat_impacts.png" alt="DC model, all features" style="float:left; margin-bottom: 20px;" width="300" height="300"/>
-<img src="notebooks/charts/dc_fw_impacts.png" alt="DC model, fw features" style="float:left; margin-bottom: 20px;" width="300" height="400"/>
-
-<img src="notebooks/charts/dc_bw_impacts.png" alt="DC model, all features" style="float:left; margin-bottom: 20px;" width="300" height="300"/>
-<img src="notebooks/charts/dc_lasso_impacts.png" alt="DC model, fw features" style="float:left; margin-bottom: 20px;" width="300" height="300"/>
+<img src="notebooks/charts/lond_allfeat_impacts.png" alt="DC model, all features" width="400" height="400"/>
 <div style="clear: both;"></div>
 
+<img src="notebooks/charts/lond_fwbw_impacts.png" alt="DC model, fw features" width="400" height="400"/>
+<div style="clear: both;"></div>
+
+<img src="notebooks/charts/lond_lasso_impacts.png" alt="DC model, fw features" width="400" height="400"/>
+<div style="clear: both;"></div>
+
+<p>
+<br>
+To summarize, higher temperatures and average temperatures result in the model output, count of usage, going up, while those values going down results in it going 
+down. Higher humidity and windspeed do the opposite, with higher values causing the model output to decrease, although low values only cause a small increase. 
+High weather values, which correspond to more severe weather, result in decreases, and when the precipitation category has an effect, a 1 for active precipitation 
+results in a decrease as well. In both of these cases, there is only a small positive increase associated with the opposite values. 
+
+All of those behaviors make sense and are what I expected. Unexpectedly, the DC models show an increase for the high value seasons, (3 - fall, 4 - winter) and a 
+decrease for the low (1 - spring, 2 - summer). This is contrary to all of the other behavior in the model. The London models do not do this, and have the expected 
+trend of high values cause a decrease and low values causing an increase. This is the only complete opposition in the models; otherwise there are only differences 
+in how much a feature is affecting the output. 
+<p>
+<br>
+</p>
 
 ### Pipelines
 ---
-
+As an exercise, I built pipelines, tweaked for each specific dataset, to cover the entire process in the `Feature Engineering` notebook. 
+((To be added.))
