@@ -601,20 +601,7 @@ For this data, there wasn't a consistent pattern to the performance in the raw s
 **London evaluation outputs**
 
 </p>
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -676,7 +663,6 @@ For this data, there wasn't a consistent pattern to the performance in the raw s
     </tr>
   </tbody>
 </table>
-</div>
 <p>
 <br>
 The R2 values for the test set are, again, very consistent. This time, however, there is a much smaller drop between the training and the test, showing that 
