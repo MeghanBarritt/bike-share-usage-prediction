@@ -1,47 +1,138 @@
 # Final Project - Bike Share Trends
 
-## Project Task<br>
-I looked at data from two cities, Washington DC and London England, over two year time spans, to try and find weather-related usage patterns in the cities' bikeshare systmes.<br>
-
-from Washington DC covering the years 2011 and 2012, and from London, England. The London data also covers two years, but covers January 4, 2015 to January 3, 2017.  to look for trends between time of day, time of year and weather conditions to try and predict bicycle rental rates. <br>
+## Project Task
+I looked at data from two cities, Washington DC and London England, over two year time spans, to try and find weather-related usage patterns in the cities' bikeshare systems.<p>
 
 ## Process
 
 ### Datasets<br>
+---
 
-Found the Washington DC Capital bike share data set on [the UC Irvine website](https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset) via a list of interesting datasets, and a second dataset on [Kaggle](https://www.kaggle.com/datasets/hmavrodiev/london-bike-sharing-dataset) tracking the same variables when I checked for other data I could use. It was the only other dataset I found that had similar enough data to be usable in a short time frame. <br>
+Found the Washington DC Capital bike share data set on [the UC Irvine website](https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset) via a list of interesting datasets, 
+and a second dataset on [Kaggle](https://www.kaggle.com/datasets/hmavrodiev/london-bike-sharing-dataset) tracking the same variables when I checked for other data I could use. 
+It was the only other dataset I found that had similar enough data to be usable in a short time frame. <p>
 
-Confirmed the same basic data was available in both dataset. The London data required more processing to get to the same columns at the end, but aside from the DC set having an additional breakdown between regular and guest users, the data available was the same. <br>
+Confirmed the same basic data was available in both dataset. The London data required more processing to get to the same columns at the end, but aside from the DC set having an 
+additional breakdown between regular and guest users, the data available was the same. <p>
 
-The DC data starts on January 1, 2011, and ran for two years, ending on December 31, 2012. The London data missed the New Year and instead starts on January 4, and also runs for two years, but from 2015 until January 3, 2017. <br>
+The DC data starts on January 1, 2011, and ran for two years, ending on December 31, 2012. The London data missed the New Year and instead starts on January 4, and also runs for 
+two years, but from 2015 until January 3, 2017. <p>
 
-Both datasets include hourly weather data; temperature, humidity, windspeed and 'weather condition', as well as whether or not a day is a holiday, the season, and of course the number of rentals. 
+Both datasets include hourly weather data; temperature, humidity, windspeed and 'weather condition', as well as whether or not a day is a holiday, the season, and of course the 
+number of rentals. 
 <p>
 <br>
 </p>
 
 ### EDA
-Explored data see distributions of various values, and to look for trends and possible correlations. Correlations with weather factors were more readily apparent to the human eye in the DC dataset, but there was significantly more usage overall in London.
+---
+Explored data see distributions of various values, and to look for trends and possible correlations. Correlations with weather factors were more readily apparent to the human eye 
+in the DC dataset, but there was significantly more usage overall in London.
 <p>
 <br>
 </p>
 
 ### Feature Engineering
-Performed feature engineering; all values related to time had to be extracted into columns for the London dataset. I also filled in gaps in the data where an hour had been skipped, using the assumption that those times had been omitted due to no bikes being rented, as for my purposes 'no rentals occured' is a useful data point. In the London set, there were some days that had no values at all, in any of the columns, which meant there was no way to fill most of them, so those entire days were dropped to avoid creating skew. Otherwise, different fill methods were used depending on the column; some columns have static values throughout the day, while others move coninuously. In the first case, the value from elsewhere in the day was simply placed, while in the second case interpolation was used to find the average between the values on either side of the missing value. <br>
+---
+Performed feature engineering; all values related to time had to be extracted into columns for the London dataset. I also filled in gaps in the data where an hour had been skipped, 
+using the assumption that those times had been omitted due to no bikes being rented, as for my purposes 'no rentals occured' is a useful data point. In the London set, there were 
+some days that had no values at all, in any of the columns, which meant there was no way to fill most of them, so those entire days were dropped to avoid creating skew. Otherwise, 
+different fill methods were used depending on the column; some columns have static values throughout the day, while others move coninuously. In the first case, the value from 
+elsewhere in the day was simply placed, while in the second case interpolation was used to find the average between the values on either side of the missing value. <p>
 
-For the DC dataset, a secondary table counting by day rather than by hour exists, so the weather values for a given day on that were used to fill missing weather values. No such second table existed for the London dataset, but exploration showed that it was reasonably common for the weather code on either side of a missing value to be the same, so simple forward fill was used to fill the missing values. <br>
+For the DC dataset, a secondary table counting by day rather than by hour exists, so the weather values for a given day on that were used to fill missing weather values. No such 
+second table existed for the London dataset, but exploration showed that it was reasonably common for the weather code on either side of a missing value to be the same, so simple 
+forward fill was used to fill the missing values. <p>
 
-The London dataset had different values in the `season`, `weather`, and `weekday` categories, so those were remapped to match the DC values. I am running them through separate models, but for consistency and so I don't confuse myself later, it made sense to have them match. In the case of the London weather encoding, it was significantly more granular than the DC encoding, so it **had** to be reformatted to be properly comparable. Both datasets have descriptions of what qualifies for each code, so I used those to group the London codes and match them to the DC ones. I also created a new `precip` column, based on those descriptions, which is a categorical 'is there precipitation or not' 0/1 column.<p>
-_(Note: filling in the missing weather values in the London dataset happened after remapping the weather codes, and as the new values were less complex than the old ones, this may have helped with the values before and after the missing info being the same.)_<br>
+The London dataset had different values in the `season`, `weather`, and `weekday` categories, so those were remapped to match the DC values. I am running them through separate models, 
+but for consistency and so I don't confuse myself later, it made sense to have them match. In the case of the London weather encoding, it was significantly more granular than the DC 
+encoding, so it **had** to be reformatted to be properly comparable. Both datasets have descriptions of what qualifies for each code, so I used those to group the London codes and match 
+them to the DC ones. I also created a new `precip` column, based on those descriptions, which is a categorical 'is there precipitation or not' 0/1 column.<p>
+_(Note: filling in the missing weather values in the London dataset happened after remapping the weather codes, and as the new values were less complex than the old ones, this may have 
+helped with the values before and after the missing info being the same.)_<p>
 
-The `temp`, `atemp` (apparent temp), `humidity` and `windspeed` columns of the DC dataset came pre-normalized, so the corresponding columns in the London dataset were normalized as well, using the MinMaxScaler, as that matched the behavior of the data as I found it. This was done before splitting to be consistent with the DC set. <br>
+The `temp`, `atemp` (apparent temp), `humidity` and `windspeed` columns of the DC dataset came pre-normalized, so the corresponding columns in the London dataset were normalized as well, 
+using the MinMaxScaler, as that matched the behavior of the data as I found it. This was done before splitting to be consistent with the DC set. <p>
+
+**Feature code legends:**
+
+|Code|Season|
+|----|------|
+| 1  |Spring|
+| 2  |Summer|
+| 3  | Fall |
+| 4  |Winter|
+|    |      |
+
+<br>
+
+| Year |  Dataset  | Code |
+|------|-----------|------|
+| 2011 |    DC     |   0  |
+| 2012 |    DC     |   1  |
+|      |           |      |
+| 2015 |  London   |   0  |
+| 2016 |  London   |   1  |
+| 2017 |  London   |   2  |
+|      |           |      |
+
+<br>
+
+| Code | Weather Description |
+|------|---------------------|
+|  1   |Clear, Few clouds, Partly cloudy, Partly cloudy|
+|  2   |Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist|
+|  3   |Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds|
+|  4   |Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog|
+|      |                     |
+
+<br>
+
+### Feature Mappings
+---
+>London Weather
+>---
+>>**1: Clear, Few clouds, Partly cloudy, Partly cloudy**<br>
+>>___
+>>Old values:<br>
+>>1 - Clear ; mostly clear but have some values with haze/fog/patches of fog/ fog in vicinity<br>
+>>2 - scattered clouds / few clouds<br>
+>---
+>>**2: Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist**<br>
+>>___
+>>Old values:<br>
+>>3 - Broken clouds<br>
+>>4 - Cloudy<br>
+>---
+>>**3: Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds**<br>
+>>___
+>>Old value:<br>
+>>7 = Rain/ light Rain shower/ Light rain<br>
+>---
+>>**4: Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog**<br>
+>>___
+>>Old values:<br>
+>>10 = rain with thunderstorm<br>
+>>26 = snowfall<br>
+>>94 = Freezing Fog<br>
+
+<br>
+
+**Mappings for 'precip` column**<p>
+
+|Weather code| Description | precip code |
+|------------|-------------|-------------|
+|1|	Clear, Few clouds, Partly cloudy, Partly cloudy|0|
+|2|	Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist|0|
+|3|	Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds|1|
+|4|	Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog|1|
 <p>
 <br>
 </p>
 
 ### Basic Models
-
-I chose four regression models to try; `LinearRegression`, `SVR` and `RandomForestRegressor` from Sklearn, and the `XGBRegressor` from XGBoost. 
+---
+I chose four regression models to try; `LinearRegression`, `SVR` and `RandomForestRegressor` from Sklearn, and the `XGBRegressor` from XGBoost. <p>
 
 Because my datasets are time-based, I did my train/test split without shuffling.
 <p>
@@ -153,23 +244,26 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 
 <p>
 
-The two models that performed the best, based on both `R-squared` and `root mean squarred error`, were the `RandomForest` and `XGBoost` models, so I chose those two models to continue tuning in the *hyperparameters* section.
-<br>
+The two models that performed the best, based on both `R-squared` and `root mean squarred error`, were the `RandomForest` and `XGBoost` models, so I chose those 
+two models to continue tuning in the *hyperparameters* section.
 </p>
 <p>
 <br>
 </p>
 
-### Feature Selection <br>
-I used three methods of feature selection. The first was running a simple `Lasso` regression, and retrieving all of the columns that did not return a coefficient of 0. This was the crudest of the methods, as the Lasso regression was completely untuned, and as a result removed the most features.<br>
+### Feature Selection 
+---
+I used three methods of feature selection. The first was running a simple `Lasso` regression, and retrieving all of the columns that did not return a coefficient of 
+0. This was the crudest of the methods, as the Lasso regression was completely untuned, and as a result removed the most features.<p>
 
-The second method was `Forward Selection`, where features are added, step by step, to the model, starting with the most significant. <br>
+The second method was `Forward Selection`, where features are added, step by step, to the model, starting with the most significant. <p>
 
-My third mthod was `Backward Selection`; starting with all features and optimizing by attempting step by step removal of features. <br>
+My third mthod was `Backward Selection`; starting with all features and optimizing by attempting step by step removal of features. <p>
 
-For both datasets, using Lasso selection resulted in the removal of multiple features. Forward and backwards select, however, dropped one feature from each set, and both dropped the same feature. Below are the selected and dropped features for each dataset, according to each method. <br>
+For both datasets, using Lasso selection resulted in the removal of multiple features. Forward and backwards select, however, dropped one feature from each set, and 
+both dropped the same feature. Below are the selected and dropped features for each dataset, according to each method. <p>
 
-_(Note: the `count` column is not involved here, as it is the dependant variable.)_
+_(Note: the `count` column is not involved here, as it is the dependant variable.)_<br>
 
 >**Using Lasso**:<br>
 >___
@@ -208,14 +302,20 @@ _(Note: the `count` column is not involved here, as it is the dependant variable
 >>Dropped features: year, weekday, holiday<br>
 >___
 
-I created new versions of X_train and X_test based on each selection list, as I wanted to test how well the model could do with feature inputs that had, theoretically been optimized. <br>
+I created new versions of X_train and X_test based on each selection list, as I wanted to test how well the model could do with feature inputs that had, 
+theoretically been optimized. <p>
 
-Because forward and backwards select on the London dataset produced the same feature list, I didn't bother to create a separate `_fw` and `_bw` train/test pair; it would have been redundant. I simply created a `_fwbw` pair instead. <br>
+Because forward and backwards select on the London dataset produced the same feature list, I didn't bother to create a separate `_fw` and `_bw` train/test pair; it 
+would have been redundant. I simply created a `_fwbw` pair instead. <br>
 <p>
+<br>
 </p>
 
 ### Hyperparameter Tuning
-To start with, I tuned both models on the regular train/test set that had all of the features. My initial attempts to use `r2` as my scoring method produced very low scores, so I ran secondary versions scoring on `neg_root_mean_squared_error`, and found that while that method did not always produce improvement, it usually at least matched the untuned model's baseline.<br>
+---
+To start with, I tuned both models on the regular train/test set that had all of the features. My initial attempts to use `r2` as my scoring method produced very low 
+scores, so I ran secondary versions scoring on `neg_root_mean_squared_error`, and found that while that method did not always produce improvement, it usually at least 
+matched the untuned model's baseline.<br>
 
 >Random Forest: <br>
 >---
@@ -368,23 +468,28 @@ To start with, I tuned both models on the regular train/test set that had all of
 </div>
 <p>
 <br>
-The DC set was all over the place for alpha and lambda values, and had the highest values for number of estimators, in one case going twice as high as the highest estimator value any London model ended up with. <br>
+The DC set was all over the place for alpha and lambda values, and had the highest values for number of estimators, in one case going twice as high as the highest 
+estimator value any London model ended up with. <p>
 
-The London set had higher alpha and lambda values on the all features version, but it dropped down for versions that had undergone feature selection. The number of estimators did the opposite, jumping up where feature election had occured.<br>
+The London set had higher alpha and lambda values on the all features version, but it dropped down for versions that had undergone feature selection. The number of 
+estimators did the opposite, jumping up where feature election had occured.<p>
 
-Both models had the learning rate decrease for versions that had undergone feature selection, with a larger decrease on the London set. <br>
+Both models had the learning rate decrease for versions that had undergone feature selection, with a larger decrease on the London set. <p>
 
-The DC dataset always used a max depth of 6, but the London dataset slightly prefered 7, with no apparent pattern. <br>
+The DC dataset always used a max depth of 6, but the London dataset slightly prefered 7, with no apparent pattern. <p>
 
 <p>
 <br>
 </p>
 
 ### Tuned Models
-
+---
 I initiated and ran each model tuned in the hyperparameters notebook so I could fully evaluate their performances.<br>
 
-During my evaluation and comparisson, I compared the tuned models for each set to the untuned one, and the overall behavior of each dataset to the other. I looked at the `R-squared` and `Root Mean Squared Error` (R2 and RMSE) of both the training and test sets, as well as the changes between them, and the RMSE as a percentage of each dataset's maximum real value, in order to get an idea of how much error there actually was; an error of +/-50 would not be a big deal when the values in question are routinely in the thousands, but *would* be a big deal if the values were dozens at most. <br>
+During my evaluation and comparisson, I compared the tuned models for each set to the untuned one, and the overall behavior of each dataset to the other. I looked at 
+the `R-squared` and `Root Mean Squared Error` (R2 and RMSE) of both the training and test sets, as well as the changes between them, and the RMSE as a percentage of each 
+dataset's maximum real value, in order to get an idea of how much error there actually was; an error of +/-50 would not be a big deal when the values in question are 
+routinely in the thousands, but *would* be a big deal if the values were dozens at most. <br>
 <p>
 
 **DC evaluation outputs**
@@ -480,11 +585,14 @@ During my evaluation and comparisson, I compared the tuned models for each set t
 </div>
 <p>
 <br>
-All the test R2 values are very consistent, regardless of model tuning or feature set, while the drop in R2 between the training and test sets is smaller for the tuned models, and even smaller with feature selection. <p>
+All the test R2 values are very consistent, regardless of model tuning or feature set, while the drop in R2 between the training and test sets is smaller for 
+the tuned models, and even smaller with feature selection. <p>
 
-The test RMSEs are all also very similar, both as actual values and as percentages of the maximum possible value. While the actual values of the error increases look quite large, approximately doubleing across the board, they are actually fairly small amounts in proportion to the overall range.<p>
+The test RMSEs are all also very similar, both as actual values and as percentages of the maximum possible value. While the actual values of the error increases 
+look quite large, approximately doubleing across the board, they are actually fairly small amounts in proportion to the overall range.<p>
 
-There is not much difference in the `RMSE as %` values (0.67) *or* in the `RMSE Increase as %` values, even though there was some improvement in how much the R2 was dropping. This could mean the model is not generalizing very well on this data, even after tuning and feature selection. <p>
+There is not much difference in the `RMSE as %` values (0.67) *or* in the `RMSE Increase as %` values, even though there was some improvement in how much the R2 
+was dropping. This could mean the model is not generalizing very well on this data, even after tuning and feature selection. <p>
 
 For this data, there wasn't a consistent pattern to the performance in the raw scores, only in the amount of change from the training to test sets. 
 </p>
@@ -571,26 +679,39 @@ For this data, there wasn't a consistent pattern to the performance in the raw s
 </div>
 <p>
 <br>
-The R2 values for the test set are, again, very consistent. This time, however, there is a much smaller drop between the training and the test, showing that the model is better at generalizing and is not overfitting. There is no difference between the version with all features included and the train/tests produced by feature selection. <p>
+The R2 values for the test set are, again, very consistent. This time, however, there is a much smaller drop between the training and the test, showing that 
+the model is better at generalizing and is not overfitting. There is no difference between the version with all features included and the train/tests produced 
+by feature selection. <p>
 
-Here there is more variation in RMSE, with improvement in all of the tuned models, and looking at it as a percentage of the maximum possible value, it is easier to see the magnitude of the changes. The model with its features selected by `Lasso` had the largest decrease, 0.59, with the other two having around 0.4.<p>
+Here there is more variation in RMSE, with improvement in all of the tuned models, and looking at it as a percentage of the maximum possible value, it is 
+easier to see the magnitude of the changes. The model with its features selected by `Lasso` had the largest decrease, 0.59, with the other two having around 
+0.4.<p>
 
-The increase in error between training and test was not similar for this model. Tuning cut the increase down dramatically for all versions. The models with feature selection had less than half the untuned model's RMSE increase. The 'all features' version was only just above the 50% mark. So, even though the actual test RMSE values were fairly close together, most of that error wasn't a result of the transition from training to test, but part of the models' attempts to account for the data. This, combined with the high R2 scores, is a good sign for the models' abilities to account for the data without overfitting. 
-</p>
-Further confirmation that the models are doing well can be seen in comparing the error on the variable being predicted, `count`, to its standard deviation in the original data. For the DC dataset it is **181.5**, while the highest test RMSE is ~73. For London those numbers are 1085.4 and ~332, respectively. In both cases, the RMSE is less than 1/3 of the standard deviation; well within "reasonable" for the data.<p>
+The increase in error between training and test was not similar for this model. Tuning cut the increase down dramatically for all versions. The models with 
+feature selection had less than half the untuned model's RMSE increase. The 'all features' version was only just above the 50% mark. So, even though the actual 
+test RMSE values were fairly close together, most of that error wasn't a result of the transition from training to test, but part of the models' attempts to 
+account for the data. This, combined with the high R2 scores, is a good sign for the models' abilities to account for the data without overfitting. <p>
+
+Further confirmation that the models are doing well can be seen in comparing the error on the variable being predicted, `count`, to its standard deviation in the 
+original data. For the DC dataset it is 181.5, while the highest test RMSE is ~73. For London those numbers are 1085.4 and ~332, respectively. In both cases, 
+the RMSE is less than 1/3 of the standard deviation; well within "reasonable" for the data.<p>
+<p>
 <br>
 </p>
 
-**Model Comparisons**<p>
-I ranked the models for each set by looking at the `Test R2` and `R2 Decrease` columns, as well as the `Test RMSE` and `RMSE Increase` columns, ignoring the training columns as they are not the target, and the other two RMSE columns as they were redundant. I put values starting at 1 for the best and so on (up to 5 for DC and 4 for London) in each column, and then added the total for each model, with the lowest value being the best overall performer. <p>
+Model Comparisons<p>
+---
+I ranked the models for each set by looking at the `Test R2` and `R2 Decrease` columns, as well as the `Test RMSE` and `RMSE Increase` columns, ignoring 
+the training columns as they are not the target, and the other two RMSE columns as they were redundant. I put values starting at 1 for the best and so on 
+(up to 5 for DC and 4 for London) in each column, and then added the total for each model, with the lowest value being the best overall performer. <p>
 
 |     DC     | Test R2 | R2 Decrease | Test RMSE| RMSE Increase | Total |
 |------------|---------|-------------|----------|---------------|-------| 
-|basic model |	3	   |      5      |	  3     |	   1        |	12  |
-|all features|	2      |   	  4      |	  2     |	   5        |	13  |
-|fw select   |	1      |   	  2      |	  1     |	   4        |	8   | 
-|bw select   |	4      |      3      |	  4     |	   3        |	14  |
-|lasso       |	5      |   	  1      |	  5     |	   2        |	13  |
+|basic model |  	3	   |      5      |	  3     |	      1       | 	12  |
+|all features|  	2    |   	  4      |	  2     |	      5       | 	13  |
+|fw select   |  	1    |   	  2      |	  1     |	      4       | 	 8  | 
+|bw select   |  	4    |      3      |	  4     |	      3       | 	14  |
+|lasso       |  	5    |   	  1      |	  5     |	      2       | 	13  |
 |            |         |             |          |               |       |
 
 Here, `Forward Select` had the best overall results, with all the others being pretty similar.<br>
@@ -598,33 +719,35 @@ Here, `Forward Select` had the best overall results, with all the others being p
 
 |   London	 | Test R2 | R2 Decrease | Test RMSE| RMSE Increase | Total |
 |------------|---------|-------------|----------|---------------|-------|
-|basic model |	  4    |	  4      |     4    |	    4       |	16  |
-|all features|	  2    |	  3      |	   2    |	    3       |	10  |
-|fwbw select |	  3    |	  2      |	   3    |	    2       |	10  |
-|lasso	     |    1    |	  1      |	   1    |	    1       |	 4  |  
+|basic model |	  4    |	    4      |     4    |	      4       |	  16  |
+|all features|	  2    |	    3      |	   2    |	      3       |	  10  |
+|fwbw select |	  3    |	    2      |	   3    |	      2       |	  10  |
+|lasso	     |    1    |	    1      |	   1    |	      1       |	   4  |  
 |            |         |             |          |               |       |
 
-Here, the basic model, with no tuning, always performed the worst, while the model using `Lasso` selected features always performed the best, albiet by very small margins.  
+Here, the basic model, with no tuning, always performed the worst, while the model using `Lasso` selected features always performed the best, albiet by 
+very small margins.  
 
 
 | Model            | Test R2 | R2 Decrease | RMSE % | RMSE Up % |
 |------------------|---------|-------------|--------|-----------|
 | DC Base          |    0.899|        0.080|    7.16|       3.67|
-| London Base      |    0.913|        0.072|	4.23|	    2.59|
+| London Base      |    0.913|        0.072|	  4.23|	      2.59|
 |                  |         |             |        |           |
 | DC Tuned Avg     |    0.889|        0.068|    7.15|       4.08|
 | London Tuned Avg |    0.931|        0.036|    3.77|       1.28|
 |                  |         |             |        |           |
 
-Despite having identical features to work with, the model does slightly better with the London dataset, especially after tuning. I am not sure if this is down to noise, or if there is a stronger pattern in the London set. Given that there is a more prevelant bike riding culture in Europe generally, this is the opposite of what I would have expected. 
 
+Despite having identical features to work with, the model does slightly better with the London dataset, especially after tuning. I am not sure if this is 
+down to noise, or if there is a stronger pattern in the London set. Given that there is a more prevelant bike riding culture in Europe generally, this is 
+the opposite of what I would have expected. 
 <p>
 <br>
 </p>
-
+![DC model, all features](notebooks/charts/dc_allfeat_impacts.png)
 ### Pipelines
-
-
+---
 
 
  
