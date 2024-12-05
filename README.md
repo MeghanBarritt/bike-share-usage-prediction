@@ -380,21 +380,6 @@ matched the untuned model's baseline.<br>
 >___
 <p>
 <br>
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -465,7 +450,6 @@ matched the untuned model's baseline.<br>
     </tr>
   </tbody>
 </table>
-</div>
 <p>
 <br>
 The DC set was all over the place for alpha and lambda values, and had the highest values for number of estimators, in one case going twice as high as the highest 
@@ -495,21 +479,6 @@ routinely in the thousands, but *would* be a big deal if the values were dozens 
 **DC evaluation outputs**
 
 </p>
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -582,7 +551,6 @@ routinely in the thousands, but *would* be a big deal if the values were dozens 
     </tr>
   </tbody>
 </table>
-</div>
 <p>
 <br>
 All the test R2 values are very consistent, regardless of model tuning or feature set, while the drop in R2 between the training and test sets is smaller for 
@@ -601,7 +569,6 @@ For this data, there wasn't a consistent pattern to the performance in the raw s
 **London evaluation outputs**
 
 </p>
-
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
