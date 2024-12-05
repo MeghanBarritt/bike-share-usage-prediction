@@ -748,11 +748,11 @@ the opposite of what I would have expected.
 
 
 
-<img src="notebooks/charts/dc_allfeat_impacts.png" alt="DC model, all features" style="float:left; margin-bottom: 20px;" width="400" height="400"/>
-<img src="notebooks/charts/dc_fw_impacts.png" alt="DC model, fw features" style="float:left; margin-bottom: 20px;" width="400" height="400"/>
+<img src="notebooks/charts/dc_allfeat_impacts.png" alt="DC model, all features" style="float:left; margin-bottom: 20px;" width="300" height="300"/>
+<img src="notebooks/charts/dc_fw_impacts.png" alt="DC model, fw features" style="float:left; margin-bottom: 20px;" width="300" height="400"/>
 
-<img src="notebooks/charts/dc_bw_impacts.png" alt="DC model, all features" style="float:left; margin-bottom: 20px;" width="400" height="400"/>
-<img src="notebooks/charts/dc_lasso_impacts.png" alt="DC model, fw features" style="float:left; margin-bottom: 20px;" width="400" height="400"/>
+<img src="notebooks/charts/dc_bw_impacts.png" alt="DC model, all features" style="float:left; margin-bottom: 20px;" width="300" height="300"/>
+<img src="notebooks/charts/dc_lasso_impacts.png" alt="DC model, fw features" style="float:left; margin-bottom: 20px;" width="300" height="300"/>
 <div style="clear: both;"></div>
 
 
