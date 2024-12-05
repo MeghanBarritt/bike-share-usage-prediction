@@ -118,7 +118,7 @@ using the MinMaxScaler, as that matched the behavior of the data as I found it. 
 
 <br>
 
-**Mappings for 'precip` column**<p>
+**Mappings for `precip` column**<p>
 
 |Weather code| Description | precip code |
 |------------|-------------|-------------|
@@ -750,5 +750,5 @@ in how much a feature is affecting the output.
 
 ### Pipelines
 ---
-As an exercise, I built pipelines, tweaked for each specific dataset, to cover the entire process in the `Feature Engineering` notebook. 
+As an exercise, I built pipelines, tweaked for each specific dataset, to cover the entire process in the `Feature Engineering` notebook. <br>
 ((To be added.))
