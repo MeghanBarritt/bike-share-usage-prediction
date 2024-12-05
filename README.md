@@ -62,7 +62,6 @@ using the MinMaxScaler, as that matched the behavior of the data as I found it. 
 | 2  |Summer|
 | 3  | Fall |
 | 4  |Winter|
-|    |      |
 
 <br>
 
@@ -74,7 +73,6 @@ using the MinMaxScaler, as that matched the behavior of the data as I found it. 
 | 2015 |  London   |   0  |
 | 2016 |  London   |   1  |
 | 2017 |  London   |   2  |
-|      |           |      |
 
 <br>
 
@@ -84,7 +82,6 @@ using the MinMaxScaler, as that matched the behavior of the data as I found it. 
 |  2   |Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist|
 |  3   |Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds|
 |  4   |Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog|
-|      |                     |
 
 <br>
 
@@ -152,7 +149,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>Root Mean Squared Error: 182.47521094734591<br>
 >>R-squared: 0.3154146362592527<br>
 >___
->___
 >**London dataset**<br>
 >___
 >>_Train set_:<br>
@@ -177,7 +173,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>_Test set_:<br>
 >>Root Mean Squared Error: 210.58087348202932<br>
 >>R-squared: 0.08828792531790608<br>
->___
 >___
 >**London dataset**  <br>
 >___
@@ -204,7 +199,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>Root Mean Squared Error: 72.87654665983804<br>
 >>R-squared: 0.8908068409097215<br>
 >___
->___
 >**London dataset** <br>
 >___
 >>_Train set_:<br>
@@ -229,7 +223,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>_Test set_:<br>
 >>Root Mean Squared Error: 69.92294989890084<br>
 >>R-squared: 0.8994784355163574<br>
->>___
 >>___
 >**London dataset**<br>
 >___
@@ -665,7 +658,6 @@ the training columns as they are not the target, and the other two RMSE columns 
 |fw select   |  	1    |   	  2      |	  1     |	      4       | 	 8  | 
 |bw select   |  	4    |      3      |	  4     |	      3       | 	14  |
 |lasso       |  	5    |   	  1      |	  5     |	      2       | 	13  |
-|            |         |             |          |               |       |
 
 Here, `Forward Select` had the best overall results, with all the others being pretty similar.<br>
 <br>
@@ -676,21 +668,9 @@ Here, `Forward Select` had the best overall results, with all the others being p
 |all features|	  2    |	    3      |	   2    |	      3       |	  10  |
 |fwbw select |	  3    |	    2      |	   3    |	      2       |	  10  |
 |lasso	     |    1    |	    1      |	   1    |	      1       |	   4  |  
-|            |         |             |          |               |       |
 
 Here, the basic model, with no tuning, always performed the worst, while the model using `Lasso` selected features always performed the best, albiet by 
-very small margins.  
-
-
-| Model            | Test R2 | R2 Decrease | RMSE % | RMSE Up % |
-|------------------|---------|-------------|--------|-----------|
-| DC Base          |    0.899|        0.080|    7.16|       3.67|
-| London Base      |    0.913|        0.072|	  4.23|	      2.59|
-|                  |         |             |        |           |
-| DC Tuned Avg     |    0.889|        0.068|    7.15|       4.08|
-| London Tuned Avg |    0.931|        0.036|    3.77|       1.28|
-|                  |         |             |        |           |
-
+very small margins.  <p>
 
 Despite having identical features to work with, the model does slightly better with the London dataset, especially after tuning. I am not sure if this is 
 down to noise, or if there is a stronger pattern in the London set. Given that there is a more prevelant bike riding culture in Europe generally, this is 
