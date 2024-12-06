@@ -12,7 +12,7 @@ Found the Washington DC Capital bike share data set on [the UC Irvine website](h
 and a second dataset on [Kaggle](https://www.kaggle.com/datasets/hmavrodiev/london-bike-sharing-dataset) tracking the same variables when I checked for other data I could use. 
 It was the only other dataset I found that had similar enough data to be usable in a short time frame. <p>
 
-Confirmed the same basic data was available in both dataset. The London data required more processing to get to the same columns at the end, but aside from the DC set having an 
+Confirmed the same basic data was available in both datasets. The London data required more processing to get to the same columns at the end, but aside from the DC set having an 
 additional breakdown between regular and guest users, the data available was the same. <p>
 
 The DC data starts on January 1, 2011, and ran for two years, ending on December 31, 2012. The London data missed the New Year and instead starts on January 4, and also runs for 
@@ -26,8 +26,103 @@ number of rentals.
 
 ### EDA
 ---
-Explored data see distributions of various values, and to look for trends and possible correlations. Correlations with weather factors were more readily apparent to the human eye 
-in the DC dataset, but there was significantly more usage overall in London.
+Looking at the target variable, the number of bikes being used (called `cnt` by default in both tables), there is a significant difference in the range of values, and therefore total useage, between the two cities. <p>
+
+<img src="notebooks/charts/target_comparison.png" alt="Target feature comparisons"/>
+<div style="clear: both;"></div>
+
+London has much, much higher numbers than DC does, and both target variables have exponential distributions.<p>
+
+<br>
+
+The `season` feature was essentially uniform in both datasets, but there were no time-value columns initially present in the London data to look at. The `year`, `weekday`, `month` and `hour` columns had to be extracted from the timestamps. As such, the charts below are actually from partway through feature engineering.
+Given that the data covered entire years, there were certain features that logically should have been uniformly distributed, or at least close to it. These were `season`, `year`, `weekday`, `month` and `hour`. 
+
+<img src="notebooks/charts/dc_uniform.png" alt="DC features with uniform distribution"/>
+<div style="clear: both;"></div>
+
+<p>
+
+<img src="notebooks/charts/lond_uniform.png" alt="London features with uniform distribution"/>
+<div style="clear: both;"></div>
+
+<p>
+
+Some minor variation in most of these values makes sense, given that not all months are the same length and the year does not always start at the beginning of the week. Additionally, 2012 was a leap year, so it has an extra day. London's year distribution was always going to be a little weird, given the data technically crosses into a third year. However, the fact that the hours showed as not completely uniform presented a problem; every day has 24 hours, so there was clearly missing data that needed to be filled in. It turned out that there were no rows with 0 rentals in the DC set, and only one in the London set, which lead me to conclude that the missing rows were the ones where there was no rental activity. The missing rows are dealt with during `Feature Engineering`. <p>
+
+<br>
+
+Although they have different names, the `temp` in the DC dataset and `t1` in the London dataset both refer to the actual temperature, while `atemp` for DC and `t2` for London both refer to the apparent temperature (per the documentation), making them directly comparable. <p>
+
+<img src="notebooks/charts/dc_normal.png" alt="DC features with normal distribution"/>
+<div style="clear: both;"></div>
+
+<p>
+
+<img src="notebooks/charts/lond_normal.png" alt="London features with normal distribution"/>
+<div style="clear: both;"></div>
+
+<p>
+
+All of these features are approximately normally distributed.<p>
+
+<br>
+
+There are also some columns that were likely to have unpredictable or skewed ditributions. First, for the DC dataset, there are the `holiday`, `workingday` and `weather` columns.<p>
+
+<img src="notebooks/charts/dc_skewed.png" alt="DC features with skew"/>
+<div style="clear: both;"></div>
+
+<p>
+
+All of these make sense, as there are more days that are not holidays, are working days, and less severe weather is more common than severe weather. <p>
+
+The London set also has `holiday`, but has `is_weekend` instead of _workingday_, and different value options for `weather`.<p>
+
+<img src="notebooks/charts/lond_skewed.png" alt="London features with skew"/>
+<div style="clear: both;"></div>
+
+<p>
+
+The holiday pattern matches the one for DC, and the weekend pattern is roughly the inverse of the one for workingday. Used together, those can produce a `workingday` column for the London dataset. <p>
+
+This weather column does not have as straight forward of a pattern as the one for the DC dataset. Its values are not sequential, resulting in the stretched histogram above. There is also one value, 94, that is never used. <p>
+
+<br>
+
+Looking at PairPlots (which are omitted due to size and computing time), there are a few features that immediately appear to correlate with the number of bikes being rented. <p>
+
+<img src="notebooks/charts/dc_app_corr.png" alt="DC set apparent correlations"/>
+<div style="clear: both;"></div>
+
+<p>
+
+<img src="notebooks/charts/lond_app_corr.png" alt="DC set apparent correlations"/>
+<div style="clear: both;"></div>
+
+<p>
+
+These best fit lines behave the way I expected; both temperature lines have an increase in temperature resulting in an increase in the rental count. Additionally, an increase in humidity, which, in the climates of the cities I am looking at, will most often relate to less pleasant weather, results in a decrease in the rental count. <p>
+
+In the DC set, where there is an hour column to look at, the best fit line loosely goes upwards was the hour increases towards midnight, and looking at the actual scatterplot, its clear that the dips are the overnight and predawn hours, which are (loosely) the lowest hours. <p>
+
+|Feature Pair |Coefficient|
+|-------------|----------:|
+|DC set       |           |
+|Count + Hour |      0.394|
+|Count + Temp |      0.405|
+|Count + Atemp|      0.400|
+|Count + Hum  |     -0.323|
+|             |           |
+|London Set   |           |
+|Count + T1   |      0.389|
+|Count + T2   |      0.369|
+|Count + Hum  |     -0.463|
+
+<p>
+
+On their own, the correlations are not particularly strong, but it is possible they will have a significant effect as part of a larger model.
+
 <p>
 <br>
 </p>
