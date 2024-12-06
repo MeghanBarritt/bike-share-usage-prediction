@@ -253,7 +253,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>_Test set_:<br>
 >>Root Mean Squared Error: 978.3105148178599<br>
 >>R-squared: 0.24876167392851933<br>
->___
 <p>
 <br>
 
@@ -278,7 +277,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>_Test set_:<br>
 >>Root Mean Squared Error: 1086.1229944892814<br>
 >>R-squared: 0.07406114159332133<br>
->___
 <p>
 <br>
 
@@ -303,7 +301,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>_Test set_:<br>
 >>Root Mean Squared Error: 289.163573168845<br>
 >>R-squared: 0.9343686316506019<br>
->___
 <p>
 <br>
 
@@ -328,7 +325,6 @@ Because my datasets are time-based, I did my train/test split without shuffling.
 >>_Test set_:<br>
 >>Root Mean Squared Error: 332.20786503370334<br>
 >>R-squared: 0.9133748412132263<br>
->___
 
 <p>
 
@@ -362,7 +358,6 @@ _(Note: the `count` column is not involved here, as it is the dependant variable
 >_London dataset_<br>
 >>Selected features: season, year, month, day, hour, weekday, workingday, weather, precip, temp, humidity, windspeed<br>
 >>Dropped features: holiday, atemp<br>
->___
 <p>
 <br>
 
@@ -375,7 +370,6 @@ _(Note: the `count` column is not involved here, as it is the dependant variable
 >_London dataset_<br>
 >>Selected features: season, month, day, hour, workingday, weather, precip, temp, atemp, humidity, windspeed<br>
 >>Dropped features: year, weekday, holiday<br>
->___
 <p>
 <br>
 
@@ -388,7 +382,6 @@ _(Note: the `count` column is not involved here, as it is the dependant variable
 >_London dataset_<br>
 >>Selected features: season, month, day, hour, workingday, weather, precip, temp, atemp, humidity, windspeed<br>
 >>Dropped features: year, weekday, holiday<br>
->___
 
 I created new versions of X_train and X_test based on each selection list, as I wanted to test how well the model could do with feature inputs that had, 
 theoretically been optimized. <p>
@@ -421,7 +414,6 @@ matched the untuned model's baseline.<br>
 >>____
 >>Base model rmse: 289.163573168845 <br>
 >>Tuned model rmse: 312.8454875514148<br>
->___
 <p>
 <br>
 
@@ -441,7 +433,6 @@ matched the untuned model's baseline.<br>
 >>___
 >>Base model rmse: 332.20786503370334 <br>
 >>Tuned model rmse: 293.8955040541115<br>
->___
 <p>
 <br>
 </p>
@@ -465,7 +456,6 @@ matched the untuned model's baseline.<br>
 >>All features: 293.8955040541115 <br>
 >>FwBw features: 287.72959089223957 <br>
 >>Lasso features: 287.6278104393208<br>
->___
 <p>
 <br>
 <table border="1" class="dataframe">
@@ -825,5 +815,62 @@ in how much a feature is affecting the output.
 
 ### Pipelines
 ---
-As an exercise, I built pipelines, tweaked for each specific dataset, to cover the entire process in the `Feature Engineering` notebook. <br>
-((To be added.))
+As an exercise, I built pipelines, tweaked for each specific dataset, to cover the entire process in the `Feature Engineering` notebook. This meant converting each step into a custom transformer. Some steps were too specific to their dataset and couldn't be generalized to work for both, such as the **fill_hours** functions. <br>
+
+|Transformer Name       |Function                                                                                                        |
+|-----------------------|----------------------------------------------------------------------------------------------------------------|
+|RenameColDC            |Rename columns to standardized names                                                                            |
+|RenameColLond          |Rename columns to standardized names                                                                            |
+|DateTimeConverter      |Convert `date` column to datetime object                                                                        |
+|FillHoursDC            |Find missing hours and create rows for them                                                                     |
+|GetHour                |Get `hour` out of `date`                                                                                        |
+|FillHoursLond          |Find missing hours and create rows for them                                                                     |
+|FillWMeans             |Fill values that are the same for 24 hour periods                                                               |
+|FillWInterpolate       |Fill values that move over 24 hour periods                                                                      |
+|MergeDataDC            |Merge `dc_hour` table to fill missing weather values                                                            |
+|FillWeatherValueDC     |Fill missing weather values for DC dataset                                                                      |
+|ForwardFillWeatherLond |Fill missing weather values for London dataset                                                                  |
+|PrecipMappingDC        |Use mapping to create `precip` column for DC dataset                                                            |
+|MakeWorkingDayLond     |Use `holiday` and `is_weekend` to create `workingday` for London dataset                                        |
+|GetDay                 |Get `day` out of `date`                                                                                         |
+|GetYr_Mn_Wkdy          |Get `year`, `month` and `weekday` out of `date`                                                                 |
+|DropNaSubsetLond       |Drop days in the London dataset that coundn't be filled with means                                              |
+|ValueMapTransformerLond|Apply mappings for `season`, `weather`, `weekday` and `precip` to London dataset; <br>`precip` column is created|
+|SetIntReorder          |Set category values to INT, reorder columns                                                                     |
+|SetIndexDate           |Set the `date` column as the index                                                                              |
+
+<p>
+<br>
+These were all run within the notebook, but I also saved them into a .py file. <p>
+
+Once assembled in order, the DC pipeline was
+
+>RenameColDC,<br>
+>FillHoursDC,<br>
+>FillWMeans,<br>
+>FillWInterpolate,<br>
+>DateTimeConverter,<br>
+>MergeDataDC,<br>
+>FillWeatherValueDC,<br>
+>PrecipMappingDC,<br>
+>GetDay,<br>
+>SetIntReorder,<br>
+>SetIndexDate
+
+
+and the London pipeline was
+
+>RenameColLond,<br>
+>MakeWorkingDayLond,<br>
+>DateTimeConverter,<br>
+>GetHour,<br>
+>FillHoursLond,<br>
+>GetDay,<br>
+>GetYr_Mn_Wkdy,<br>
+>FillWMeans,<br>
+>DropNaSubsetLond,<br>
+>FillWInterpolate,<br>
+>ForwardFillWeatherLond,<br>
+>ValueMapTransformerLond,<br>
+>SetIntReorder,<br>
+>SetIndexDate
